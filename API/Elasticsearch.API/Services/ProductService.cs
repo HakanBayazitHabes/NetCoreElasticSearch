@@ -39,12 +39,25 @@ public class ProductService
     public async Task<ResponseDto<ProductDto>> GetByIdAsync(string id)
     {
         var hasProduct = await _productRepository.GetByIdAsync(id);
-    
+
         if (hasProduct is null)
         {
             return ResponseDto<ProductDto>.Fail("Ürün bulunamadı.", HttpStatusCode.NotFound);
         }
-    
+
         return ResponseDto<ProductDto>.Success(hasProduct.CreateDto(), HttpStatusCode.OK);
+    }
+
+    public async Task<ResponseDto<bool>> UpdateAsync(ProductUpdateDto updateProduct)
+    {
+        var isSuccess = await _productRepository.UpdateAsync(updateProduct);
+
+        if (!isSuccess)
+        {
+            return ResponseDto<bool>.Fail("Güncelleme işlemi sırasında bir hata meydana geldi.", HttpStatusCode.InternalServerError);
+        }
+
+        return ResponseDto<bool>.Success(true, HttpStatusCode.NoContent);
+
     }
 }
