@@ -17,4 +17,8 @@ public class ResponseDto<T>
         return new ResponseDto<T> { Errors = errors, Status = status };
     }
 
+    public static ResponseDto<T> Fail(string error, HttpStatusCode status)
+    {
+        return new ResponseDto<T> { Errors = [error], Status = status };
+    }
 }

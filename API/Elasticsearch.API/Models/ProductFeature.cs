@@ -1,3 +1,4 @@
+
 namespace Elasticsearch.API.Models;
 
 public class ProductFeature
