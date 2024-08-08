@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Elasticsearch.API.DTOs;
 using Elasticsearch.API.Repositories;
 
@@ -22,5 +23,14 @@ public class ProductService
         }
 
         return ResponseDto<ProductDto>.Success(responseProduct.CreateDto(), System.Net.HttpStatusCode.Created);
+    }
+
+    public async Task<ResponseDto<List<ProductDto>>> GetAllAsync()
+    {
+        var responseProducts = await _productRepository.GetAllAsync();
+
+        var productListDto = responseProducts.Select(x => x.CreateDto()).ToList();
+
+        return ResponseDto<List<ProductDto>>.Success(productListDto, System.Net.HttpStatusCode.OK);
     }
 }
