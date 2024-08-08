@@ -1,18 +1,19 @@
-using System.Collections.Immutable;
 using System.Net;
 using Elasticsearch.API.DTOs;
-using Elasticsearch.API.Models;
 using Elasticsearch.API.Repositories;
+using Nest;
 
 namespace Elasticsearch.API.Services;
 
 public class ProductService
 {
     private readonly ProductRepository _productRepository;
+    private readonly ILogger<ProductService> _logger;
 
-    public ProductService(ProductRepository productRepository)
+    public ProductService(ProductRepository productRepository, ILogger<ProductService> logger)
     {
         _productRepository = productRepository;
+        _logger = logger;
     }
 
     public async Task<ResponseDto<ProductDto>> SaveAsync(ProductCreateDto request)
@@ -63,10 +64,16 @@ public class ProductService
 
     public async Task<ResponseDto<bool>> DeleteAsync(string id)
     {
-        var isSuccess = await _productRepository.DeleteAsync(id);
+        var deleteResponse = await _productRepository.DeleteAsync(id);
 
-        if (!isSuccess)
+        if (!deleteResponse.IsValid && deleteResponse.Result == Result.NotFound)
         {
+            return ResponseDto<bool>.Fail("Silme işlemi sırasında bir hata meydana geldi.", HttpStatusCode.NotFound);
+        }
+
+        if (!deleteResponse.IsValid)
+        {
+            _logger.LogError(deleteResponse.OriginalException, deleteResponse.ServerError.Error.ToString());
             return ResponseDto<bool>.Fail("Silme işlemi sırasında bir hata meydana geldi.", HttpStatusCode.InternalServerError);
         }
 
