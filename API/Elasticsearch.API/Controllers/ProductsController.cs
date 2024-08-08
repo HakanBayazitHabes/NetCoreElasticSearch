@@ -36,4 +36,10 @@ public class ProductsController : BaseController
     {
         return CreateActionResult(await _productService.GetByIdAsync(id));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        return CreateActionResult(await _productService.DeleteAsync(id));
+    }
 }
