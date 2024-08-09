@@ -94,4 +94,18 @@ public class ECommerceRepository
 
         return response.Documents.ToImmutableList();
     }
+
+    public async Task<ImmutableList<ECommerce>> MatchAllQueryAsync()
+    {
+        List<FieldValue> terms = [];
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Size(100)
+                .Query(q => q
+                    .MatchAll()));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+
+        return result.Documents.ToImmutableList();
+    }
 }

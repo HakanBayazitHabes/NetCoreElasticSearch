@@ -41,4 +41,11 @@ public class ECommerceController : ControllerBase
         var response = await _repository.RangeQueryAsync(fromPrice, toPrice);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> MatchAll()
+    {
+        var response = await _repository.MatchAllQueryAsync();
+        return Ok(response);
+    }
 }
