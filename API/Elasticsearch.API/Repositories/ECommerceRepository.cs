@@ -169,6 +169,22 @@ public class ECommerceRepository
         return result.Documents.ToImmutableList();
     }
 
+    public async Task<ImmutableList<ECommerce>> MultiMatchQueryFullTextAsync(string name)
+    {
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Size(1000)
+                .Query(q => q
+                    .MultiMatch(mm => mm
+                        .Fields(new Field("customer_first_name")
+                            .And(new Field("customer_last_name"))
+                            .And(new Field("customer_full_name")))
+                                .Query(name))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
+    }
+
     public async Task<ImmutableList<ECommerce>> MatchBoolPrefixFullTextAsync(string customerFullName)
     {
         var result = await _client.SearchAsync<ECommerce>(s => s

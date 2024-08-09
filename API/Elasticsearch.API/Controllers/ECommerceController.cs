@@ -99,9 +99,16 @@ public class ECommerceController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> CompoundQueryExampleTwoAsync(string customerFullName)
+    public async Task<IActionResult> CompoundQueryExampleTwo(string customerFullName)
     {
         var response = await _repository.CompoundQueryExampleTwoAsync(customerFullName);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> MultiMatchQueryFullText(string name)
+    {
+        var response = await _repository.MultiMatchQueryFullTextAsync(name);
         return Ok(response);
     }
 }
