@@ -28,7 +28,9 @@ public class ECommerceRepository
 
         var termQuery = new TermQuery("customer_first_name.keyword") { Value = customerFirstName, CaseInsensitive = true };
 
-        var response = await _client.SearchAsync<ECommerce>(s => s.Index(indexName).Query(termQuery));
+        var response = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Query(termQuery));
 
         response.Hits.ToList().ForEach(hit => hit.Source.Id = hit.Id);
         return response.Documents.ToImmutableList();
@@ -56,12 +58,12 @@ public class ECommerceRepository
         // 2. Yol
         var result = await _client.SearchAsync<ECommerce>(s => s
         .Index(indexName)
-        .Size(100)
-        .Query(q => q
-        .Terms(t => t
-        .Field(f => f.CustomerFirstName
-        .Suffix("keyword"))
-        .Terms(new TermsQueryField(terms.AsReadOnly())))));
+            .Size(100)
+                .Query(q => q
+                    .Terms(t => t
+                        .Field(f => f.CustomerFirstName
+                            .Suffix("keyword"))
+                                .Terms(new TermsQueryField(terms.AsReadOnly())))));
 
         result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
 
@@ -126,7 +128,11 @@ public class ECommerceRepository
     {
         var result = await _client.SearchAsync<ECommerce>(s => s
         .Index(indexName)
-            .Query(q => q.Wildcard(w => w.Field(f => f.CustomerFullName.Suffix("keyword")).Wildcard(customerFullName))));
+            .Query(q => q
+                .Wildcard(w => w
+                    .Field(f => f.CustomerFullName
+                        .Suffix("keyword"))
+                            .Wildcard(customerFullName))));
 
         result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
         return result.Documents.ToImmutableList();
@@ -158,6 +164,20 @@ public class ECommerceRepository
                     .Match(m => m
                         .Field(f => f.Category)
                             .Query(categoryName).Operator(Operator.And))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
+    }
+
+    public async Task<ImmutableList<ECommerce>> MatchBoolPrefixFullTextAsync(string customerFullName)
+    {
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Size(1000)
+                .Query(q => q
+                    .MatchBoolPrefix(m => m
+                        .Field(f => f.CustomerFullName)
+                            .Query(customerFullName))));
 
         result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
         return result.Documents.ToImmutableList();
