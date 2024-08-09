@@ -97,10 +97,23 @@ public class ECommerceRepository
 
     public async Task<ImmutableList<ECommerce>> MatchAllQueryAsync()
     {
-        List<FieldValue> terms = [];
         var result = await _client.SearchAsync<ECommerce>(s => s
         .Index(indexName)
             .Size(100)
+                .Query(q => q
+                    .MatchAll()));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+
+        return result.Documents.ToImmutableList();
+    }
+
+    public async Task<ImmutableList<ECommerce>> PaginationQueryAsync(int page, int pageSize)
+    {
+        var pageFrom = (page - 1) * pageSize;
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Size(pageSize).From(pageFrom)
                 .Query(q => q
                     .MatchAll()));
 
