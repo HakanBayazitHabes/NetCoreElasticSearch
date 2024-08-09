@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Elasticsearch.API.DTOs;
 
 namespace Elasticsearch.API.Models;
