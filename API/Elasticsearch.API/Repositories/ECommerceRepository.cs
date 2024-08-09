@@ -182,4 +182,49 @@ public class ECommerceRepository
         result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
         return result.Documents.ToImmutableList();
     }
+
+    public async Task<ImmutableList<ECommerce>> MatchPhraseFullTextAsync(string customerFullName)
+    {
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Size(1000)
+                .Query(q => q
+                    .MatchPhrase(m => m
+                        .Field(f => f.CustomerFullName)
+                            .Query(customerFullName))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
+    }
+
+    public async Task<ImmutableList<ECommerce>> CompoundQueryExampleOneAsync(string cityName, double TaxFulTotalPrice, string categoryName, string menufacturer)
+    {
+        var result = await _client.SearchAsync<ECommerce>(s => s
+            .Index(indexName)
+                .Size(1000)
+                    .Query(q => q
+                        .Bool(b => b
+                            .Must(m => m
+                                .Term(t => t
+                                    .Field("geoip.city_name")
+                                    .Value(cityName)))
+
+                            .MustNot(mn => mn
+                                .Range(r => r
+                                    .NumberRange(nr => nr
+                                        .Field(f => f.TaxFulTotalPrice)
+                                        .Lte(TaxFulTotalPrice))))
+                            .Should(s => s
+                                .Term(t => t
+                                    .Field(f => f.Category.Suffix("keyword"))
+                                    .Value(categoryName)))
+                            .Filter(f => f
+                                .Term(t => t
+                                    .Field("manufacturer.keyword")
+                                    .Value(menufacturer))))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
+
+    }
 }

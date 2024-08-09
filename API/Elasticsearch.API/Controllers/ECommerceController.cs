@@ -83,4 +83,18 @@ public class ECommerceController : ControllerBase
         var response = await _repository.MatchBoolPrefixFullTextAsync(customerFullName);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> MatchPhraseQueryFullText(string customerFullName)
+    {
+        var response = await _repository.MatchPhraseFullTextAsync(customerFullName);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> CompoundQueryExampleOne(string cityName, double TaxFulTotalPrice, string categoryName, string menufacturer)
+    {
+        var response = await _repository.CompoundQueryExampleOneAsync(cityName, TaxFulTotalPrice, categoryName, menufacturer);
+        return Ok(response);
+    }
 }
