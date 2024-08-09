@@ -80,4 +80,18 @@ public class ECommerceRepository
 
         return response.Documents.ToImmutableList();
     }
+
+    public async Task<ImmutableList<ECommerce>> RangeQueryAsync(double fromPrice, double toPrice)
+    {
+        var response = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Query(q => q
+                .Range(t => t
+                    .NumberRange(nr => nr
+                        .Field(f => f.TaxFulTotalPrice)
+                            .Gte(fromPrice)
+                                .Lte(toPrice)))));
+
+        return response.Documents.ToImmutableList();
+    }
 }

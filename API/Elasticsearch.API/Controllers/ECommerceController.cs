@@ -34,4 +34,11 @@ public class ECommerceController : ControllerBase
         var response = await _repository.PrefixQueryAsync(customerFullName);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> RangeQuery(double fromPrice, double toPrice)
+    {
+        var response = await _repository.RangeQueryAsync(fromPrice, toPrice);
+        return Ok(response);
+    }
 }
