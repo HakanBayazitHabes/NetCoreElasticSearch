@@ -42,13 +42,28 @@ public class ECommerceRepository
             terms.Add(x);
         });
 
+        /*
+        1. Yol
         var termsQuery = new TermsQuery()
         {
             Field = "customer_first_name.keyword",
             Terms = new TermsQueryField(terms.AsReadOnly())
         };
 
-        var result = await _client.SearchAsync<ECommerce>(s => s.Query(termsQuery));
+        var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName).Query(termsQuery));
+        */
+
+        // 2. Yol
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+        .Size(100)
+        .Query(q => q
+        .Terms(t => t
+        .Field(f => f.CustomerFirstName
+        .Suffix("keyword"))
+        .Terms(new TermsQueryField(terms.AsReadOnly())))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
 
         return result.Documents.ToImmutableList();
     }
