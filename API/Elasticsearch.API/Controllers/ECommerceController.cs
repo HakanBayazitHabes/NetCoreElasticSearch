@@ -69,4 +69,11 @@ public class ECommerceController : ControllerBase
         var response = await _repository.FuzzyQueryAsync(customerName);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> MatchQueryFullText(string categoryName)
+    {
+        var response = await _repository.MatchQueryFullTextAsync(categoryName);
+        return Ok(response);
+    }
 }
