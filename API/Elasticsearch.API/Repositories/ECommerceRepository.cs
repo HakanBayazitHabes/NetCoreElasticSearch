@@ -225,6 +225,37 @@ public class ECommerceRepository
 
         result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
         return result.Documents.ToImmutableList();
+    }
 
+    public async Task<ImmutableList<ECommerce>> CompoundQueryExampleTwoAsync(string customerFullName)
+    {
+        /*
+        It do same work
+        var result = await _client.SearchAsync<ECommerce>(s => s
+            .Index(indexName)
+                .Size(1000)
+                    .Query(q => q
+                        .MatchPhrasePrefix(m => m
+                            .Field(f => f.CustomerFullName)
+                            .Query(customerFullName))));
+        */
+
+        var result = await _client.SearchAsync<ECommerce>(s => s
+            .Index(indexName)
+                .Size(1000)
+                    .Query(q => q
+                        .Bool(b => b
+                            .Should(m => m
+                                .Match(m => m
+                                    .Field(f => f.CustomerFullName)
+                                    .Query(customerFullName))
+                                .Prefix(p => p
+                                    .Field(p => p
+                                        .CustomerFullName.Suffix("keyword"))
+                                        .Value(customerFullName))
+                                    ))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
     }
 }

@@ -97,4 +97,11 @@ public class ECommerceController : ControllerBase
         var response = await _repository.CompoundQueryExampleOneAsync(cityName, TaxFulTotalPrice, categoryName, menufacturer);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> CompoundQueryExampleTwoAsync(string customerFullName)
+    {
+        var response = await _repository.CompoundQueryExampleTwoAsync(customerFullName);
+        return Ok(response);
+    }
 }
