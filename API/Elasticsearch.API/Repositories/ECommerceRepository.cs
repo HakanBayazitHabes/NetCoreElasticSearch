@@ -121,4 +121,14 @@ public class ECommerceRepository
 
         return result.Documents.ToImmutableList();
     }
+
+    public async Task<ImmutableList<ECommerce>> WildCardQueryAsync(string customerFullName)
+    {
+        var result = await _client.SearchAsync<ECommerce>(s => s
+        .Index(indexName)
+            .Query(q => q.Wildcard(w => w.Field(f => f.CustomerFullName.Suffix("keyword")).Wildcard(customerFullName))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToImmutableList();
+    }
 }

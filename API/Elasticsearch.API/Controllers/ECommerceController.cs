@@ -55,4 +55,11 @@ public class ECommerceController : ControllerBase
         var response = await _repository.PaginationQueryAsync(page, pageSize);
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> WildCardQuery(string customerFullName)
+    {
+        var response = await _repository.WildCardQueryAsync (customerFullName);
+        return Ok(response);
+    }
 }
