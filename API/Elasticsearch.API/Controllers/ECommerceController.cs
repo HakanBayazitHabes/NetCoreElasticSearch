@@ -59,7 +59,14 @@ public class ECommerceController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> WildCardQuery(string customerFullName)
     {
-        var response = await _repository.WildCardQueryAsync (customerFullName);
+        var response = await _repository.WildCardQueryAsync(customerFullName);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> FuzzyQuery(string customerName)
+    {
+        var response = await _repository.FuzzyQueryAsync(customerName);
         return Ok(response);
     }
 }
