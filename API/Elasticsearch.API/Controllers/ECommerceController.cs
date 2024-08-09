@@ -24,7 +24,14 @@ public class ECommerceController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> TermsQuery(List<string> customerFirstNameList)
     {
-        var response = await _repository.TermsQuery(customerFirstNameList );
+        var response = await _repository.TermsQuery(customerFirstNameList);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> PrefixQuery(string customerFullName)
+    {
+        var response = await _repository.PrefixQueryAsync(customerFullName);
         return Ok(response);
     }
 }
