@@ -20,4 +20,33 @@ public class BlogRepository(ElasticsearchClient client)
 
         return newBlog;
     }
+
+    public async Task<List<Blog>> SearchAsync(string searchText)
+    {
+        //title
+        //content
+
+        // should ((term1 and term2) or term3)
+
+        // title => full text
+        // content => full text
+
+        var result = await _elasticsearchClient.SearchAsync<Blog>(s => s
+            .Index(indexName)
+                .Size(1000)
+                    .Query(q => q
+                        .Bool(b => b
+                            .Should(m => m
+                                .Match(s => s
+                                    .Field(f => f.Content)
+                                    .Query(searchText)),
+                                s => s.MatchBoolPrefix(p => p
+                                    .Field(p => p
+                                        .Title)
+                                        .Query(searchText))
+                                    ))));
+
+        result.Hits.ToList().ForEach(x => x.Source.Id = x.Id);
+        return result.Documents.ToList();
+    }
 }
