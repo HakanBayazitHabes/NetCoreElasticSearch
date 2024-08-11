@@ -15,7 +15,7 @@ public class BlogService(BlogRepository repository)
         {
             Title = model.Title,
             Content = model.Content,
-            Tags = model.Tags.ToArray(),
+            Tags = model.Tags.Split(","),
             UserId = Guid.NewGuid(),
         };
 
