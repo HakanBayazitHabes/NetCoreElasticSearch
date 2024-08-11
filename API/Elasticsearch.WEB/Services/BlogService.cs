@@ -24,8 +24,19 @@ public class BlogService(BlogRepository repository)
         return response != null;
     }
 
-    public async Task<List<Blog>> SearchAsync(string searchText)
+    public async Task<List<BlogViewModel>> SearchAsync(string searchText)
     {
-        return await _repository.SearchAsync(searchText);
+        var blogList = await _repository.SearchAsync(searchText);
+
+        return blogList.Select(b => new BlogViewModel()
+        {
+            Id = b.Id,
+            Title = b.Title,
+            Content = b.Content,
+            Created = b.Created.ToShortDateString(),
+            Tags = string.Join(",", b.Tags),
+            UserId = b.UserId.ToString()
+
+        }).ToList();
     }
 }

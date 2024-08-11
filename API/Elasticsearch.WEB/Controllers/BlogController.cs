@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Elasticsearch.WEB.Models;
 using Elasticsearch.WEB.Services;
 using Elasticsearch.WEB.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,20 @@ namespace Elasticsearch.WEB.Controllers
     public class BlogController(BlogService blogService) : Controller
     {
         private readonly BlogService _blogService = blogService;
+
+        public async Task<IActionResult> SearchAsync()
+        {
+            return View(await _blogService.SearchAsync(string.Empty));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchText)
+        {
+            ViewBag.searchText = searchText;
+            var response = await _blogService.SearchAsync(searchText);
+
+            return View(response);
+        }
 
         public IActionResult Save()
         {
