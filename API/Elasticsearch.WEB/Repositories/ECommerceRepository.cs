@@ -24,7 +24,6 @@ public class ECommerceRepository
         //page=2 pagesize=10 20
         List<Action<QueryDescriptor<ECommerce>>> listQuery = new();
 
-
         if (searchViewModel is null)
         {
 
