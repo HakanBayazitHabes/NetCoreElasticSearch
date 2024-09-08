@@ -86,7 +86,6 @@ public class ECommerceRepository
         var pageFrom = (page - 1) * pageSize;
 
         var result = await _elasticSearchClient.SearchAsync<ECommerce>(s => s.Index(IndexName)
-            //.Scroll("2m")  
             //.Size(10000)
             .Size(pageSize).From(pageFrom)
             .Query(q => q

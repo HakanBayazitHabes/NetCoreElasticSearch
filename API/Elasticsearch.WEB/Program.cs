@@ -1,6 +1,7 @@
 using Elasticsearch.WEB.Extensions;
 using Elasticsearch.WEB.Repositories;
 using Elasticsearch.WEB.Services;
+using Elasticsearch.WEB.Services.DrugElasticsearchService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,10 @@ builder.Services.AddScoped<BlogRepository>();
 builder.Services.AddScoped<BlogService>();
 builder.Services.AddScoped<ECommerceService>();
 builder.Services.AddScoped<ECommerceRepository>();
+builder.Services.AddScoped<DrugBarcodeRepository>();
+builder.Services.AddScoped<DrugBarcodeService>();
+builder.Services.AddScoped<DrugElasticSearchRepository>();
+builder.Services.AddScoped<DrugElasticsearchService>();
 
 
 

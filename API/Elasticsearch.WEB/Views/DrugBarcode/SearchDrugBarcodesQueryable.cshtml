@@ -1,0 +1,128 @@
+@{
+    ViewData["Title"] = "SearchDrugBarcodesQueryable";
+}
+
+@{
+    ViewData["Title"] = "Drug Barcode Search";
+}
+
+@model IEnumerable<Elasticsearch.WEB.Models.DrugBarcode>
+
+<head>
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .search-form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .results-table {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Sol tarafta arama formu -->
+            <div class="col-md-3">
+                <div class="search-form">
+                    <h3>Arama Kriterleri</h3>
+                    <form method="post" action="/DrugBarcode/SearchDrugBarcodesQueryable">
+
+                        <div class="mb-3">
+                            <label for="producer" class="form-label">QrCode</label>
+                            <input type="text" name="qrCode" class="form-control" placeholder="QrCode"
+                                value="@Context.Request.Query["qrCode"]" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="drugName" class="form-label">İlaç Adı</label>
+                            <input type="text" name="drugName" class="form-control" placeholder="İlaç Adı"
+                                value="@Context.Request.Query["drugName"]" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="producer" class="form-label">Üretici Adı</label>
+                            <input type="text" name="producer" class="form-control" placeholder="Üretici Adı"
+                                value="@Context.Request.Query["producer"]" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Ara</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sağ tarafta arama sonuçları -->
+            <div class="col-md-9">
+                <div class="results-table">
+                    <h3>Arama Sonuçları</h3>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <p>Toplam @Model.Count() sonuç bulundu.</p>
+                        <p>Veri getirilme süresi: @ViewData["ElapsedTime"] ms</p> <!-- Verinin getirilme süresi -->
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>QR Code</th>
+                                    <th>Create Date</th>
+                                    <th>İlaç Adı</th>
+                                    <th>Üretici</th>
+                                    <th>Reçete Tipi</th>
+                                    <th>Barkod</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var drugBarcode in Model)
+                                {
+                                    <tr>
+                                        <td>@drugBarcode.QRCode</td>
+                                        <td>@drugBarcode.CreateDate.ToShortDateString()</td>
+                                        <td>@drugBarcode.Drug.DrugName</td>
+                                        <td>@drugBarcode.Drug.Producer</td>
+                                        <td>@drugBarcode.Drug.RecipeType</td>
+                                        <td>@drugBarcode.Drug.Barcode</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @* <!-- Pagination -->
+                    <nav>
+                    <ul class="pagination justify-content-center">
+                    <li class="page-item"><a class="page-link" href="#">First</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Last</a></li>
+                    </ul>
+                    </nav> *@
+                    }
+                    else
+                    {
+                        <p>Sonuç bulunamadı.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
