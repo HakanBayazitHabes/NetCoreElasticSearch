@@ -40,6 +40,18 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="ECommerce"
                                 asp-action="Search">ECommerce Search</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DrugBarcode"
+                                asp-action="SearchDrugBarcodesWithEnumerable">DrugBarcode Search(IEnumerable)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DrugBarcode"
+                                asp-action="SearchDrugBarcodesQueryable">DrugBarcode Search(IQueryable)</a>
+                        </li>      
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="DrugsElasticSearch"
+                                asp-action="Search">Drugs Search(Elastic)</a>
+                        </li>                           
                     </ul>
                 </div>
             </div>

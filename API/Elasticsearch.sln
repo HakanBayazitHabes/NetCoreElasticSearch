@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elasticsearch.API", "Elasti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elasticsearch.WEB", "Elasticsearch.WEB\Elasticsearch.WEB.csproj", "{6B2C009D-5E08-4541-9207-2679E68B9CB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchMarkTest", "BenchMarkTest\BenchMarkTest.csproj", "{13DBB7F2-D482-4CA4-A416-FF5DE3581E51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{6B2C009D-5E08-4541-9207-2679E68B9CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B2C009D-5E08-4541-9207-2679E68B9CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B2C009D-5E08-4541-9207-2679E68B9CB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13DBB7F2-D482-4CA4-A416-FF5DE3581E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DBB7F2-D482-4CA4-A416-FF5DE3581E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13DBB7F2-D482-4CA4-A416-FF5DE3581E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13DBB7F2-D482-4CA4-A416-FF5DE3581E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
